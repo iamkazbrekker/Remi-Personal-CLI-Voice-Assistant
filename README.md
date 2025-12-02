@@ -1,73 +1,59 @@
-# **personalCLI**
 
-A lightweight Windows-only command-line assistant built in Python.
-It allows you to open apps, close programs, search the web, open YouTube in Brave, fetch battery level, and run custom shortcuts from a simple terminal-like interface.
 
----
+## **Remi — Personal CLI Voice Assistant (Windows)**
 
-## **Features**
+### **Overview**
 
-* Launch Windows apps (`chrome`, `vscode`, `spotify`, etc.)
-* Open websites and run instant web searches
-* YouTube search in Brave browser
-* Kill/close running applications
-* Check battery status
-* System commands (shutdown, restart)
-* Easily expandable with new commands
-* Simple REPL-style interface (`$ command`)
+PersonalCLI is a voice-controlled command-line assistant for Windows.
+It listens continuously for voice commands and performs system actions like opening apps, searching YouTube, checking weather, reading news headlines, controlling power actions, and more.
+The project aims to evolve into a floating GUI microphone widget that launches at system startup and stays always-listening.
 
 ---
 
-## **Supported Commands**
+### **Current Features**
 
-| Command           | Example                | Description                         |                             
-| ----------------- | ---------------------- | ----------------------------------- | 
-| `open <app        | url>`                  | `open chrome`                       | 
-| `close <app>`     | `close chrome`         | Kills an application (`taskkill`)   |                             
-| `youtube <query>` | `youtube lofi beats`   | Searches YouTube (opens in Brave)   |                             
-| `google <query>`  | `google python typing` | Google search                       |                             
-| `wiki <query>`    | `wiki tensor`          | Wikipedia search                    |                             
-| `shutdown`        | `shutdown`             | Shutdown (with confirmation)        |                             
-| `restart`         | `restart`              | Restart (with confirmation)         |                             
-| `battery`         | `battery`              | Shows battery % and charging status |                             
-| `help`            | `help`                 | Prints available commands           |                             
-| `exit`            | `exit`                 | Quits the CLI                       |                             
+#### **System / OS Commands**
 
-Additional placeholder commands exist but are not implemented yet.
+| Command                | Description                                                                    |
+| ---------------------- | ------------------------------------------------------------------------------ |
+| `open <app>`           | Opens an installed application (Chrome, Brave, VSCode, Notepad, Spotify, etc.) |
+| `close <app>`          | Force closes a running process                                                 |
+| `shutdown` / `restart` | System shutdown or restart with confirmation                                   |
+| `battery`              | Displays battery percentage & power status                                     |
+| `exit`                 | Terminates the assistant                                                       |
 
----
+#### **Internet & Media Commands**
 
-## **Installation**
-
-### Requirements
-
-* Windows
-* Python 3.9+
-* `psutil` installed:
-
-```
-pip install psutil
-```
-
-### Run
-
-```
-python main.py
-```
-
-You will see:
-
-```
-$ 
-```
-
-You may now enter commands.
+| Command              | Description                                 |
+| -------------------- | ------------------------------------------- |
+| `google <query>`     | Google search in default browser            |
+| `youtube <keywords>` | YouTube search in Brave browser             |
+| `news <topic>`       | Fetches top 5 news headlines                |
+| `weather <city>`     | Current temperature & wind using met.no API |
+| `wiki <keywords>`    | Wikipedia search                            |
 
 ---
 
-## **How App Launching Works**
+### **Dependencies**
 
-Applications are mapped manually here:
+Install the required libraries:
+
+```bash
+pip install speechrecognition requests psutil pyaudio
+```
+
+Windows users might need:
+
+```bash
+pip install pipwin
+pipwin install pyaudio
+```
+
+---
+
+### **App & Path Configuration**
+
+Apps are resolved using `__appMap__` and common install folders:
 
 ```python
 __appMap__ = {
@@ -79,60 +65,53 @@ __appMap__ = {
 }
 ```
 
-The launcher:
-
-1. Checks if the argument is a URL
-2. Checks if it’s a valid path
-3. Checks in `__appMap__`
-4. Searches common install directories
-5. Falls back to PATH lookup (`shutil.which`)
+Add custom apps by inserting new entries.
 
 ---
 
-## **YouTube in Brave**
+### **Voice Recognition Loop**
 
-YouTube commands always use Brave:
-
-```python
-brave = r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe"
-```
-
-To change browsers, simply edit this path.
-
----
-
-## **Process Closing**
-
-Closing an app uses:
+The assistant continuously prints:
 
 ```
-taskkill /IM <app>.exe /F
+Listening...
+You said: <command>
 ```
 
-A confirmation prompt prevents accidental termination.
+Then performs the requested operation.
 
 ---
 
-## **Extending personalCLI**
+### **Future Goals**
 
-To add new commands:
+Planned upcoming features:
 
-1. Add the command name into `__commands__`
-2. Add handling logic inside `checkType()`
-3. Add a function for the behavior (e.g., play music, control volume, etc.)
+* Floating circular GUI widget (Tkinter or PyQt)
+* Continuous background microphone listener
+* Hotword activation (e.g., “Hey Remi”)
+* Local offline speech recognition
+* Media controls (play, pause, volume, next)
+* Screenshot & screen recording
+* File operations and automation
+* Multi-step command pipeline
 
-This design keeps the project modular and easy to grow.
 
 ---
 
-## **Future Enhancements**
+### **Known Issues**
 
-* Volume/music control
-* Weather & news API
-* Screenshot and screen recording
-* File management (move, copy, etc.)
-* System stats
-* Plugin system
-* Voice input
+* Google Speech API requires Internet
+* Might misinterpret sentences with more than 2–3 words
+* News API key may require rotating services later
+
+---
+
+### **Contribution**
+
+PRs and Ideas are welcome.
+Future goal: Make it a modular desktop assistant framework.
+
+---
+
 
 
