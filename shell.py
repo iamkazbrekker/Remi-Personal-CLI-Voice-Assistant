@@ -288,7 +288,7 @@ def listen_for_voice():
         audio = recognizer.listen(source)
     
     try:
-        command = recognizer.recognize_google(audio)
+        command = recognizer.recognize_google(audio) #type: ignore
         print(f"You said: {command}")
         return command.lower()
     except Exception:
